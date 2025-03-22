@@ -1,0 +1,27 @@
+<p-dialog header="Wymiana walut: {{buyingCurrency? 'Kupno': 'Sprzedaż'}} {{foreignCurr}}" [(visible)]="display" [modal]="true" [closable]="false" [resizable]="false" [responsive]="true" >
+  <div class="p-fluid">
+    <div class="p-field-texts">
+      <div class="p-field">
+        <label for="currencyFrom">Z</label>
+        <div class="inputs-from">
+          <input class="currency-from-input" type="text" pInputText [(ngModel)]="fromAmount">
+          <input class="currency-from" type="text" pInputText [(ngModel)]="currencyFrom" disabled="true">
+        </div>
+      </div>
+      <div class="swap-div">
+        <button pButton type="button" class="swap-button" icon="pi pi-sync" (click)="swap()"></button>
+      </div>
+        <div class="p-field">
+            <label for="currencyTo">Na</label>
+            <div class="inputs-from">
+              <input class="currency-from-input" type="text" pInputText [value]="toAmount()" disabled="true">
+              <input class="currency-from" type="text" pInputText [(ngModel)]="currencyTo" disabled="true">
+            </div>
+        </div>
+      </div>
+    <div class="p-field-buttons">
+        <button pButton type="button" label="Anuluj" icon="pi pi-times" class="p-button-secondary dialog-button" (click)="hideDialog()"></button>
+        <button pButton type="button" label="Wymień" icon="pi pi-check" class="dialog-button" (click)="exchangeCurrency()"></button>
+    </div>
+  </div>
+</p-dialog>

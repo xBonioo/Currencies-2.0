@@ -1,0 +1,12 @@
+<div class="register-form">
+    <input class="input" type="text" placeholder="Email" pInputText [(ngModel)]="user.email" />
+    <input class="input" type="password" placeholder="Hasło" pInputText [(ngModel)]="user.password" />
+    <input class="input" type="password" placeholder="Powtórz hasło" pInputText [(ngModel)]="user.confirmPassword" />
+    <input class="input" type="text" placeholder="Nazwa użytkownika" pInputText [(ngModel)]="user.userName" />
+    <input class="input" type="text" placeholder="Adres" pInputText [(ngModel)]="user.adres" />
+    <input class="input" type="text" placeholder="PESEL" pInputText [(ngModel)]="pesl" />
+    <input class="input" type="text" placeholder="Numer dowodu" pInputText [(ngModel)]="user.idNumber" />
+    <p-calendar class="input data" placeholder="Data wydania dowodu"  [showIcon]="true" [(ngModel)]="user.idIssueDate" [style]="{'width':'100%'}" [inputStyle]="{'width':'100%'}"> </p-calendar>
+    <p-calendar class="input data" placeholder="Termin ważności dowodu" [showIcon]="true" [(ngModel)]="user.idExpiryDate" [style]="{'width':'100%'}" [inputStyle]="{'width':'100%'}"> </p-calendar>
+    <p-button label="Zarejestruj" (onClick)="register()"></p-button>
+</div>

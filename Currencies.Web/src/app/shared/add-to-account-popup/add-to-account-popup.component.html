@@ -1,0 +1,17 @@
+<p-dialog header="Doładuj konto" [(visible)]="display" [modal]="true" [closable]="false" [resizable]="false" [responsive]="true" >
+    <div class="add-money">
+        <div class="p-field-texts">
+            <div class="p-field">
+                <label for="currencyFrom">Ile chcesz doładować i w jakiej walucie?</label>
+                <div class="inputs-from">
+                    <input class="amount" type="text" pInputText [(ngModel)]="amount" >
+                    <p-dropdown appendTo="body" class="currency-from-input dialog-dropdown" [options]="currencyOptions" [(ngModel)]="selectedCurrency" placeholder="Waluta"></p-dropdown>
+                </div>
+            </div>
+        </div>
+        <div class="p-field-buttons">
+            <button pButton type="button" label="Anuluj" icon="pi pi-times" class="p-button-secondary dialog-button" (click)="hideDialog()"></button>
+            <button pButton type="button" label="Doładuj" icon="pi pi-check" class="dialog-button" (click)="addMoney()"></button>
+        </div>
+    </div>
+</p-dialog>

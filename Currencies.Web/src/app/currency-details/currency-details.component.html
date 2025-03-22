@@ -1,0 +1,18 @@
+<div class="details-body">
+    <div class="curr-info">
+        <h1>{{currencyInfo?.data.symbol}}</h1>
+        <p>{{currencyInfo?.data.description}}</p>
+    </div>
+    <p-chart class="chart" type="line" [data]="data" [options]="options"></p-chart>
+    <div class="exchange-info">
+        <div class="buy-div">
+            <h2 class="buy-label">Kupno</h2>
+            <h1 class="buy-rate">{{exchangeInfo?.Data.Item1.Rate}}</h1>
+        </div>
+        <div class="sell-div">
+            <h2 class="sell-label">Sprzedaż</h2>
+            <h1 class="sell-rate">{{exchangeInfo?.Data.Item2.Rate}}</h1>
+        </div>
+    </div>
+    <p-button class="button" icon="pi pi-money-bill" label="Rozpocznij wymiane" iconPos="right" (onClick)="exchange()"></p-button>
+</div>

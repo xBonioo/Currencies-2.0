@@ -1,0 +1,22 @@
+<div class="card">
+    <div class="button-div">
+        <p-button class="button" icon="pi pi-wallet" label="Doładuj konto" iconPos="right" (onClick)="add()"></p-button>
+    </div>
+    <p-table #dt class="table" [value]="currencies" selectionMode="single">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Nazwa waluty</th>
+          <th>Kod</th>
+          <th>Stan konta</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-currency>
+        <tr>
+          <td>{{getName(currency.currencyId)}}</td>
+          <td>{{getSymbol(currency.currencyId)}}</td>
+          <td>{{currency.amount + ' ' + getSymbol(currency.currencyId)}}</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+  
