@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using NLog.Web;
 
 namespace Currencies.WebApi;
 
@@ -155,7 +156,7 @@ public class Program
                 ValidIssuer = builder.Configuration["Authentication:Issuer"],
                 ValidAudience = builder.Configuration["Authentication:Audience"],
                 IssuerSigningKey =
-                    new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Authentication:SecretKey"])),
+                    new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Authentication:SecretKey"] ?? throw new InvalidOperationException())),
                 ValidateIssuer = true,
                 ValidateAudience = true,
                 ValidateIssuerSigningKey = true,
@@ -174,6 +175,9 @@ public class Program
             options.DefaultPolicy = defaultPolicyBuilder.Build();
         });
 
+        builder.Logging.ClearProviders();
+        builder.Host.UseNLog();
+        
         var app = builder.Build();
         databaseManager.ApplyMigrations(app);
 

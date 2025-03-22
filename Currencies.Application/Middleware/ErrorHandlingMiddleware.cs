@@ -11,8 +11,6 @@ namespace Currencies.Application.Middleware;
 
 public class ErrorHandlingMiddleware(ILogger<ErrorHandlingMiddleware> logger) : IMiddleware
 {
-    private readonly ILogger<ErrorHandlingMiddleware> _logger = logger;
-
     public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
         try
@@ -24,10 +22,11 @@ public class ErrorHandlingMiddleware(ILogger<ErrorHandlingMiddleware> logger) : 
             var response = new BaseResponse<IEnumerable<ValidationFailure>>
             {
                 ResponseCode = StatusCodes.Status422UnprocessableEntity,
-                Message = $"One or more validation errors has occurred.",
+                Message = "One or more validation errors has occurred.",
                 BaseResponseError = validationException.Errors
                     .Select(x => new BaseResponseError(x.PropertyName, x.ErrorCode, x.ErrorMessage)).ToList()
             };
+            logger.LogInformation("One or more validation errors has occurred.");
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = StatusCodes.Status422UnprocessableEntity;
             await context.Response.WriteAsync(JsonSerializer.Serialize(response));
@@ -39,6 +38,7 @@ public class ErrorHandlingMiddleware(ILogger<ErrorHandlingMiddleware> logger) : 
                 ResponseCode = StatusCodes.Status400BadRequest,
                 Message = $"Some server error has occurred. {badRequestException.Message}"
             };
+            logger.LogInformation($"Some server error has occurred. {badRequestException.Message}");
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = StatusCodes.Status400BadRequest;
             await context.Response.WriteAsync(JsonSerializer.Serialize(response));
@@ -50,6 +50,7 @@ public class ErrorHandlingMiddleware(ILogger<ErrorHandlingMiddleware> logger) : 
                 ResponseCode = StatusCodes.Status404NotFound,
                 Message = $"The item you were looking for was not found. {notFoundException.Message}"
             };
+            logger.LogInformation($"The item you were looking for was not found. {notFoundException.Message}");
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = StatusCodes.Status404NotFound;
             await context.Response.WriteAsync(JsonSerializer.Serialize(response));
@@ -61,6 +62,7 @@ public class ErrorHandlingMiddleware(ILogger<ErrorHandlingMiddleware> logger) : 
                 ResponseCode = StatusCodes.Status500InternalServerError,
                 Message = $"{dbException.Message}."
             };
+            logger.LogInformation($"{dbException.Message}");
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = StatusCodes.Status500InternalServerError;
             await context.Response.WriteAsync(JsonSerializer.Serialize(response));
@@ -70,8 +72,9 @@ public class ErrorHandlingMiddleware(ILogger<ErrorHandlingMiddleware> logger) : 
             var response = new BaseResponse<string>
             {
                 ResponseCode = StatusCodes.Status500InternalServerError,
-                Message = $"Some server error has occured."
+                Message = "Some server error has occured."
             };
+            logger.LogInformation("Some server error has occured.");
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = StatusCodes.Status500InternalServerError;
             await context.Response.WriteAsync(JsonSerializer.Serialize(response));
