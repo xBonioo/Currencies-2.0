@@ -21,15 +21,8 @@ namespace Currencies.WebApi.Controllers;
 [Authorize]
 [Route("api/currency")]
 [ApiController]
-public class CurrencyController : Controller
+public class CurrencyController(IMediator mediator) : Controller
 {
-    private readonly IMediator _mediator;
-
-    public CurrencyController(IMediator mediator)
-    {
-        _mediator = mediator;
-    }
-
     /// <summary>
     /// Retrieves all available currencies.
     /// </summary>
@@ -39,7 +32,7 @@ public class CurrencyController : Controller
     [HttpGet]
     public async Task<ActionResult<BaseResponse<PageResult<CurrencyDto>>>> GetAllCurrencies([FromQuery] FilterCurrencyDto filter)
     {
-        var result = await _mediator.Send(new GetCurrenciesListQuery(filter));
+        var result = await mediator.Send(new GetCurrenciesListQuery(filter));
         if (result == null)
         {
             return NotFound(new BaseResponse<PageResult<CurrencyDto>>
@@ -65,7 +58,7 @@ public class CurrencyController : Controller
     [HttpGet("{id}")]
     public async Task<ActionResult<BaseResponse<CurrencyDto>>> GetCurrencyById(int id)
     {
-        var result = await _mediator.Send(new GetSingleCurrencyQuery(id));
+        var result = await mediator.Send(new GetSingleCurrencyQuery(id));
         if (result == null)
         {
             return NotFound(new BaseResponse<CurrencyDto>
@@ -90,7 +83,7 @@ public class CurrencyController : Controller
     [HttpPost]
     public async Task<ActionResult<BaseResponse<CurrencyDto>>> CreateCurrency([FromBody] BaseCurrencyDto dto)
     {
-        var result = await _mediator.Send(new CreateCurrencyCommand(dto));
+        var result = await mediator.Send(new CreateCurrencyCommand(dto));
         if (result == null)
         {
             return BadRequest(new BaseResponse<CurrencyDto>
@@ -114,7 +107,7 @@ public class CurrencyController : Controller
     [HttpGet("{id}/edit-form")]
     public async Task<ActionResult<BaseResponse<CurrencyEditForm>>> GetCurrencyEditForm(int id)
     {
-        var result = await _mediator.Send(new GetCurrencyEditFormQuery(id));
+        var result = await mediator.Send(new GetCurrencyEditFormQuery(id));
         if (result == null)
         {
             return NotFound(new BaseResponse<CurrencyEditForm>
@@ -140,7 +133,7 @@ public class CurrencyController : Controller
     [HttpPost("{id}/edit")]
     public async Task<ActionResult<BaseResponse<CurrencyDto>>> UpdateCurrency(int id, [FromBody] BaseCurrencyDto dto)
     {
-        var result = await _mediator.Send(new UpdateCurrencyCommand(id, dto));
+        var result = await mediator.Send(new UpdateCurrencyCommand(id, dto));
         if (result == null)
         {
             return NotFound(new BaseResponse<CurrencyDto>
@@ -166,7 +159,7 @@ public class CurrencyController : Controller
     [HttpDelete("{id}/delete")]
     public async Task<ActionResult<BaseResponse<bool>>> DeleteCurrency(int id)
     {
-        var result = await _mediator.Send(new DeleteCurrencyCommand(id));
+        var result = await mediator.Send(new DeleteCurrencyCommand(id));
         if (!result)
         {
             return NotFound(new BaseResponse<bool>

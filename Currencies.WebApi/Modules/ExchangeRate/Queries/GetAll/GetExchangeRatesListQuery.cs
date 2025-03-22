@@ -4,12 +4,7 @@ using MediatR;
 
 namespace Currencies.WebApi.Modules.ExchangeRate.Queries.GetAll;
 
-public class GetExchangeRatesListQuery : IRequest<PageResult<ExchangeRateDto>>
+public class GetExchangeRatesListQuery(FilterExchangeRateDto filter) : IRequest<PageResult<ExchangeRateDto>>
 {
-    public FilterExchangeRateDto Filter;
-
-    public GetExchangeRatesListQuery(FilterExchangeRateDto filter)
-    {
-        Filter = filter;
-    }
+    public FilterExchangeRateDto Filter = filter;
 }

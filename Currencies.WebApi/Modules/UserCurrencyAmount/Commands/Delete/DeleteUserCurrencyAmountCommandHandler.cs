@@ -3,17 +3,11 @@ using MediatR;
 
 namespace Currencies.WebApi.Modules.UserCurrencyAmount.Commands.Delete;
 
-public class DeleteUserCurrencyAmountCommandHandler : IRequestHandler<DeleteUserCurrencyAmountCommand, bool>
+public class DeleteUserCurrencyAmountCommandHandler(IUserCurrencyAmountService userCurrencyAmountService)
+    : IRequestHandler<DeleteUserCurrencyAmountCommand, bool>
 {
-    private readonly IUserCurrencyAmountService _userCurrencyAmountService;
-
-    public DeleteUserCurrencyAmountCommandHandler(IUserCurrencyAmountService userCurrencyAmountService)
-    {
-        _userCurrencyAmountService = userCurrencyAmountService;
-    }
-
     public async Task<bool> Handle(DeleteUserCurrencyAmountCommand request, CancellationToken cancellationToken)
     {
-        return await _userCurrencyAmountService.DeleteAsync(request.Id, cancellationToken);
+        return await userCurrencyAmountService.DeleteAsync(request.Id, cancellationToken);
     }
 }

@@ -5,19 +5,13 @@ using MediatR;
 
 namespace Currencies.WebApi.Modules.Role.Queries.GetEditForm;
 
-public class GetRoleEditFormQueryHandler : IRequestHandler<GetRoleEditFormQuery, RoleEditForm?>
+public class GetRoleEditFormQueryHandler(IRoleService roleService)
+    : IRequestHandler<GetRoleEditFormQuery, RoleEditForm?>
 {
-    private readonly IRoleService _roleService;
-
-    public GetRoleEditFormQueryHandler(IRoleService roleService)
+    public async Task<RoleEditForm?> Handle(GetRoleEditFormQuery request, CancellationToken cancellationToken)
     {
-        _roleService = roleService;
-    }
-
-    public async Task<RoleEditForm> Handle(GetRoleEditFormQuery request, CancellationToken cancellationToken)
-    {
-        var role = await _roleService.GetByIdAsync(request.id, cancellationToken);
-        if (role == null || !role.IsActive)
+        var role = await roleService.GetByIdAsync(request.id, cancellationToken);
+        if (role is not { IsActive: true })
         {
             var createForm = new RoleEditForm()
             {

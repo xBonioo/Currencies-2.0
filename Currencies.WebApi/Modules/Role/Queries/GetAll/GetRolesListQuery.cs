@@ -4,12 +4,7 @@ using MediatR;
 
 namespace Currencies.WebApi.Modules.Role.Queries.GetAll;
 
-public class GetRolesListQuery : IRequest<PageResult<RoleDto>>
+public class GetRolesListQuery(FilterRoleDto filter) : IRequest<PageResult<RoleDto>>
 {
-    public FilterRoleDto Filter;
-
-    public GetRolesListQuery(FilterRoleDto filter)
-    {
-        Filter = filter;
-    }
+    public FilterRoleDto Filter = filter;
 }

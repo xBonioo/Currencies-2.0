@@ -7,20 +7,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Currencies.WebApi.Modules.User.Queries.GetUser;
 
-public class GetUserInformationQueryHandler : IRequestHandler<GetUserInformationQuery, UserDto?>
+public class GetUserInformationQueryHandler(TableContext dbContext, IMapper mapper)
+    : IRequestHandler<GetUserInformationQuery, UserDto?>
 {
-    private readonly TableContext _dbContext;
-    private readonly IMapper _mapper;
-
-    public GetUserInformationQueryHandler(TableContext dbContext, IMapper mapper)
-    {
-        _dbContext = dbContext;
-        _mapper = mapper;
-    }
-
     public async Task<UserDto?> Handle(GetUserInformationQuery request, CancellationToken cancellationToken)
     {
-        var result = await _dbContext
+        var result = await dbContext
             .Users
             .FirstOrDefaultAsync(x => x.Id == request.request.UserId, cancellationToken);
 
@@ -29,6 +21,6 @@ public class GetUserInformationQueryHandler : IRequestHandler<GetUserInformation
             throw new NotFoundException("User not found");
         }
 
-        return _mapper.Map<UserDto>(result);
+        return mapper.Map<UserDto>(result);
     }
 }

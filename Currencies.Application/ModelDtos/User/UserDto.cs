@@ -1,6 +1,6 @@
 ﻿namespace Currencies.Application.ModelDtos.User;
 
-public class UserDto
+public sealed class UserDto
 {
     public string Id { get; set; } = null!;
     public string Email { get; set; } = null!;
@@ -9,8 +9,8 @@ public class UserDto
     public string? SecondName { get; set; }
     public string Adres { get; set; } = null!;
     public int IdentityNumber { get; set; }
-    public string IDNumber { get; set; } = null!;
-    public DateTime IDExpiryDate { get; set; }
-    public DateTime IDIssueDate { get; set; }
+    public string IdNumber { get; set; } = null!;
+    public DateTime IdExpiryDate { get; set; }
+    public DateTime IdIssueDate { get; set; }
     public bool IsActive { get; set; }
 }

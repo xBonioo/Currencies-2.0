@@ -7,23 +7,19 @@ using MediatR;
 
 namespace Currencies.WebApi.Modules.UserCurrencyAmount.Queries.GetEditForm;
 
-public class GetUserCurrencyAmountEditFormQueryHandler : IRequestHandler<GetUserCurrencyAmountEditFormQuery, UserCurrencyAmountEditForm?>
+public class GetUserCurrencyAmountEditFormQueryHandler(
+    IUserCurrencyAmountService userCurrencyAmountService,
+    IMapper mapper,
+    TableContext dbContext)
+    : IRequestHandler<GetUserCurrencyAmountEditFormQuery, UserCurrencyAmountEditForm?>
 {
-    private readonly IUserCurrencyAmountService _userCurrencyAmountService;
-    private readonly IMapper _mapper;
-    private readonly TableContext _dbContext;
+    private readonly IMapper _mapper = mapper;
+    private readonly TableContext _dbContext = dbContext;
 
-    public GetUserCurrencyAmountEditFormQueryHandler(IUserCurrencyAmountService userCurrencyAmountService, IMapper mapper, TableContext dbContext)
+    public async Task<UserCurrencyAmountEditForm?> Handle(GetUserCurrencyAmountEditFormQuery request, CancellationToken cancellationToken)
     {
-        _userCurrencyAmountService = userCurrencyAmountService;
-        _mapper = mapper;
-        _dbContext = dbContext;
-    }
-
-    public async Task<UserCurrencyAmountEditForm> Handle(GetUserCurrencyAmountEditFormQuery request, CancellationToken cancellationToken)
-    {
-        var userCurrencyAmount = await _userCurrencyAmountService.GetByIdAsync(request.Id, cancellationToken);
-        if (userCurrencyAmount == null || !userCurrencyAmount.IsActive)
+        var userCurrencyAmount = await userCurrencyAmountService.GetByIdAsync(request.Id, cancellationToken);
+        if (userCurrencyAmount is not { IsActive: true })
         {
             var createForm = new UserCurrencyAmountEditForm()
             {

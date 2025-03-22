@@ -5,19 +5,13 @@ using MediatR;
 
 namespace Currencies.WebApi.Modules.Currency.Queries.GetEditForm;
 
-public class GetCurrencyEditFormQueryHandler : IRequestHandler<GetCurrencyEditFormQuery, CurrencyEditForm?>
+public class GetCurrencyEditFormQueryHandler(ICurrencyService currencyService)
+    : IRequestHandler<GetCurrencyEditFormQuery, CurrencyEditForm?>
 {
-    private readonly ICurrencyService _currencyService;
-
-    public GetCurrencyEditFormQueryHandler(ICurrencyService currencyService)
-    {
-        _currencyService = currencyService;
-    }
-
     public async Task<CurrencyEditForm?> Handle(GetCurrencyEditFormQuery request, CancellationToken cancellationToken)
     {
-        var currency = await _currencyService.GetByIdAsync(request.id, cancellationToken);
-        if (currency == null || !currency.IsActive)
+        var currency = await currencyService.GetByIdAsync(request.id, cancellationToken);
+        if (currency is not { IsActive: true })
         {
             var createForm = new CurrencyEditForm()
             {

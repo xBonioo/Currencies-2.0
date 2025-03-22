@@ -6,7 +6,7 @@ public class AnonymousTypeModel
     public string Name { get; set; } = null!;
     public string? Symbol { get; set; }
     public string? Description { get; set; }
-    public decimal? Rate_Direction_0 { get; set; }
-    public decimal? Rate_Direction_1 { get; set; }
+    public decimal? RateDirection0 { get; set; }
+    public decimal? RateDirection1 { get; set; }
     public bool IsActive { get; set; }
 }

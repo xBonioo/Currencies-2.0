@@ -59,10 +59,10 @@ public class CurrencyService(TableContext dbContext, IMapper mapper) : ICurrency
     {
         var baseQuery = from c in dbContext.Currencies
                     join er0 in dbContext.ExchangeRate.Where(er => er.Direction == Direction.Buy && er.IsActive)
-                        on c.Id equals er0.ToCurrencyID into er0Group
+                        on c.Id equals er0.ToCurrencyId into er0Group
                     from er0 in er0Group.DefaultIfEmpty()
                     join er1 in dbContext.ExchangeRate.Where(er => er.Direction == Direction.Sell && er.IsActive)
-                        on c.Id equals er1.ToCurrencyID into er1Group
+                        on c.Id equals er1.ToCurrencyId into er1Group
                     from er1 in er1Group.DefaultIfEmpty()
                     where c.IsActive
                     select new AnonymousTypeModel
@@ -71,8 +71,8 @@ public class CurrencyService(TableContext dbContext, IMapper mapper) : ICurrency
                         Name = c.Name,
                         Symbol = c.Symbol,
                         Description = c.Description,
-                        Rate_Direction_0 = er0 != null ? er0.Rate : (decimal?)null,
-                        Rate_Direction_1 = er1 != null ? er1.Rate : (decimal?)null,
+                        RateDirection0 = er0 != null ? er0.Rate : null,
+                        RateDirection1 = er1 != null ? er1.Rate : null,
                         IsActive = c.IsActive
                     };
 
@@ -84,7 +84,7 @@ public class CurrencyService(TableContext dbContext, IMapper mapper) : ICurrency
 
         if (!string.IsNullOrEmpty(filter.SearchPhrase))
         {
-            baseQuery = baseQuery.Where(x => x.Name.Contains(filter.SearchPhrase) || x.Symbol.Contains(filter.SearchPhrase) || (!string.IsNullOrEmpty(x.Description) && x.Description.Contains(filter.SearchPhrase)));
+            baseQuery = baseQuery.Where(x => x.Symbol != null && (x.Name.Contains(filter.SearchPhrase) || x.Symbol.Contains(filter.SearchPhrase) || (!string.IsNullOrEmpty(x.Description) && x.Description.Contains(filter.SearchPhrase))));
         }
         if (filter.IsActive != null)
         {

@@ -3,14 +3,8 @@ using MediatR;
 
 namespace Currencies.WebApi.Modules.Currency.Commands.Update;
 
-public class UpdateCurrencyCommand : IRequest<CurrencyDto>
+public class UpdateCurrencyCommand(int id, BaseCurrencyDto dto) : IRequest<CurrencyDto>
 {
-    public int Id { get; set; }
-    public BaseCurrencyDto Dto { get; set; }
-
-    public UpdateCurrencyCommand(int id, BaseCurrencyDto dto)
-    {
-        Id = id;
-        Dto = dto;
-    }
+    public int Id { get; set; } = id;
+    public BaseCurrencyDto Dto { get; set; } = dto;
 }

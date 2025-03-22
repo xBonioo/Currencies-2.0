@@ -193,8 +193,8 @@ public class TableContext : IdentityDbContext<
             new ExchangeRate
             {
                 Id = 1,
-                FromCurrencyID = 4,
-                ToCurrencyID = 1,
+                FromCurrencyId = 4,
+                ToCurrencyId = 1,
                 Rate = 4,
                 Direction = Direction.Buy
 }           );
@@ -212,10 +212,10 @@ public class TableContext : IdentityDbContext<
             new UserExchangeHistory
             {
                 Id = 1,
-                UserID = "679381f2-06a1-4e22-beda-179e8e9e3236",
-                RateID = 1,
+                UserId = "679381f2-06a1-4e22-beda-179e8e9e3236",
+                RateId = 1,
                 Amount = 20,
-                AccountID = 1,
+                AccountId = 1,
                 PaymentStatus = PaymentStatus.Completed,
                 PaymentType = PaymentType.Blik
             });

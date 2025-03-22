@@ -2,7 +2,7 @@
 
 namespace Currencies.Db.Entities;
 
-public class UserCurrencyAmount : ICreatable, IModifable
+public sealed class UserCurrencyAmount : ICreatable, IModifable
 {
     public int Id { get; set; }
     public string UserId { get; set; } = null!;
@@ -12,6 +12,6 @@ public class UserCurrencyAmount : ICreatable, IModifable
     public DateTime CreatedOn { get; set; }
     public DateTime? ModifiedOn { get; set; }
 
-    public virtual ApplicationUser User { get; set; }
-    public virtual Currency Currency { get; set; }
+    public ApplicationUser User { get; set; }
+    public Currency Currency { get; set; }
 }

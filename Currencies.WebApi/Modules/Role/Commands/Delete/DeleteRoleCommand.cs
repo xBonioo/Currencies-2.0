@@ -2,12 +2,7 @@
 
 namespace Currencies.WebApi.Modules.Role.Commands.Delete;
 
-public class DeleteRoleCommand : IRequest<bool>
+public class DeleteRoleCommand(int id) : IRequest<bool>
 {
-    public int Id { get; set; }
-
-    public DeleteRoleCommand(int id)
-    {
-        Id = id;
-    }
+    public int Id { get; set; } = id;
 }

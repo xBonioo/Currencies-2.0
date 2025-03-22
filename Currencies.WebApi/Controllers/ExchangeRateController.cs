@@ -23,15 +23,8 @@ namespace Currencies.WebApi.Controllers;
 [Authorize]
 [Route("api/exchange")]
 [ApiController]
-public class ExchangeRateController : Controller
+public class ExchangeRateController(IMediator mediator) : Controller
 {
-    private readonly IMediator _mediator;
-
-    public ExchangeRateController(IMediator mediator)
-    {
-        _mediator = mediator;
-    }
-
     /// <summary>
     /// Retrieves all available exchange rates.
     /// </summary>
@@ -40,7 +33,7 @@ public class ExchangeRateController : Controller
     [HttpGet]
     public async Task<ActionResult<BaseResponse<PageResult<ExchangeRateDto>>>> GetAllExchangeRates([FromQuery] FilterExchangeRateDto filter)
     {
-        var result = await _mediator.Send(new GetExchangeRatesListQuery(filter));
+        var result = await mediator.Send(new GetExchangeRatesListQuery(filter));
         if (result is null)
         {
             return NotFound(new BaseResponse<PageResult<ExchangeRateDto>>
@@ -66,7 +59,7 @@ public class ExchangeRateController : Controller
     [HttpGet("{direction}/{id}")]
     public async Task<ActionResult<BaseResponse<List<ExchangeRateDto>>>> GetExchangeRateById(int id, int direction)
     {
-        var result = await _mediator.Send(new GetSingleExchangeRateQuery(id, direction));
+        var result = await mediator.Send(new GetSingleExchangeRateQuery(id, direction));
         if (result == null)
         {
             return NotFound(new BaseResponse<List<ExchangeRateDto>>
@@ -92,7 +85,7 @@ public class ExchangeRateController : Controller
     [HttpGet("from/{fromId}/to/{toId}")]
     public async Task<IActionResult> GetExchangeRateByCurrencyId(int fromId, int toId)
     {
-        var result = await _mediator.Send(new GetSingleExchangeRateFromCurrencyQuery(fromId, toId));
+        var result = await mediator.Send(new GetSingleExchangeRateFromCurrencyQuery(fromId, toId));
         if(result == (null, null))
         {
             return NotFound(new BaseResponse<(ExchangeRateDto, ExchangeRateDto)>
@@ -138,7 +131,7 @@ public class ExchangeRateController : Controller
             });
         }
 
-        var result = await _mediator.Send(new CreateExchangeRateCommand(date));
+        var result = await mediator.Send(new CreateExchangeRateCommand(date));
         if (result == null)
         {
             return BadRequest(new BaseResponse<ExchangeRateDto>
@@ -162,7 +155,7 @@ public class ExchangeRateController : Controller
     [HttpGet("{id}/edit-form")]
     public async Task<ActionResult<BaseResponse<ExchangeRateEditForm?>>> GetExchangeRateEditForm(int id)
     {
-        var result = await _mediator.Send(new GetExchangeRateEditFormQuery(id));
+        var result = await mediator.Send(new GetExchangeRateEditFormQuery(id));
         if (result == null)
         {
             return NotFound(new BaseResponse<ExchangeRateEditForm?>
@@ -188,7 +181,7 @@ public class ExchangeRateController : Controller
     [HttpPost("{id}/edit")]
     public async Task<ActionResult<BaseResponse<ExchangeRateDto>>> UpdateExchangeRate(int id, [FromBody] BaseExchangeRateDto dto)
     {
-        var result = await _mediator.Send(new UpdateExchangeRateCommand(id, dto));
+        var result = await mediator.Send(new UpdateExchangeRateCommand(id, dto));
         if (result == null)
         {
             return NotFound(new BaseResponse<ExchangeRateDto>
@@ -214,7 +207,7 @@ public class ExchangeRateController : Controller
     [HttpDelete("{id}/delete")]
     public async Task<ActionResult<BaseResponse<bool>>> DeleteExchangeRate(int id)
     {
-        var result = await _mediator.Send(new DeleteExchangeRateCommand(id));
+        var result = await mediator.Send(new DeleteExchangeRateCommand(id));
         if (!result)
         {
             return NotFound(new BaseResponse<bool>

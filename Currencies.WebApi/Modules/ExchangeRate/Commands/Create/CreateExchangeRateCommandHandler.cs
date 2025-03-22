@@ -8,21 +8,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Currencies.WebApi.Modules.ExchangeRate.Commands.Create;
 
-public class CreateExchangeRateCommandHandler : IRequestHandler<CreateExchangeRateCommand, List<ExchangeRateDto>?>
+public class CreateExchangeRateCommandHandler(IExchangeRateService exchangeRate, TableContext dbContext)
+    : IRequestHandler<CreateExchangeRateCommand, List<ExchangeRateDto>?>
 {
-    private readonly IExchangeRateService _exchangeRate;
-    private readonly TableContext _dbContext;
-
-    public CreateExchangeRateCommandHandler(IExchangeRateService exchangeRate, TableContext dbContext)
-    {
-        _exchangeRate = exchangeRate;
-        _dbContext = dbContext;
-    }
-
     public async Task<List<ExchangeRateDto?>> Handle(CreateExchangeRateCommand request, CancellationToken cancellationToken)
     {
         var currencyExchangeRateList = new List<CurrencyExchangeRateDto>();
-        var currencies = await _dbContext.Currencies
+        var currencies = await dbContext.Currencies
             .AsQueryable()
             .ToListAsync(cancellationToken);
 
@@ -64,6 +56,6 @@ public class CreateExchangeRateCommandHandler : IRequestHandler<CreateExchangeRa
 
         httpClient.Dispose();
 
-        return await _exchangeRate.CreateAsync(currencyExchangeRateList, cancellationToken);
+        return await exchangeRate.CreateAsync(currencyExchangeRateList, cancellationToken);
     }
 }

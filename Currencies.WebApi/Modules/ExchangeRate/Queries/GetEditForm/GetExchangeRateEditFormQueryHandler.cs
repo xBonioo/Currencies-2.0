@@ -6,19 +6,13 @@ using MediatR;
 
 namespace Currencies.WebApi.Modules.ExchangeRate.Queries.GetEditForm;
 
-public class GetExchangeRateEditFormQueryHandler : IRequestHandler<GetExchangeRateEditFormQuery, ExchangeRateEditForm?>
+public class GetExchangeRateEditFormQueryHandler(IExchangeRateService exchangeRateService)
+    : IRequestHandler<GetExchangeRateEditFormQuery, ExchangeRateEditForm?>
 {
-    private readonly IExchangeRateService _exchangeRateService;
-
-    public GetExchangeRateEditFormQueryHandler(IExchangeRateService exchangeRateService)
-    {
-        _exchangeRateService = exchangeRateService;
-    }
-
     public async Task<ExchangeRateEditForm?> Handle(GetExchangeRateEditFormQuery request, CancellationToken cancellationToken)
     {
-        var exchangeRate = await _exchangeRateService.GetByIdAsync(request.id, cancellationToken);
-        if (exchangeRate == null || !exchangeRate.IsActive)
+        var exchangeRate = await exchangeRateService.GetByIdAsync(request.id, cancellationToken);
+        if (exchangeRate is not { IsActive: true })
         {
             var createForm = new ExchangeRateEditForm()
             {
@@ -63,14 +57,14 @@ public class GetExchangeRateEditFormQueryHandler : IRequestHandler<GetExchangeRa
             FromCurrencyId = new IntegerControl()
             {
                 IsRequired = true,
-                Value = exchangeRate.FromCurrencyID,
+                Value = exchangeRate.FromCurrencyId,
                 MinValue = 1,
                 MaxValue = 15
             },
             ToCurrencyId = new IntegerControl()
             {
                 IsRequired = true,
-                Value = exchangeRate.ToCurrencyID,
+                Value = exchangeRate.ToCurrencyId,
                 MinValue = 1,
                 MaxValue = 15
             },

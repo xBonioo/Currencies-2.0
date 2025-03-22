@@ -23,15 +23,8 @@ namespace Currencies.WebApi.Controllers;
 //[Authorize]
 [Route("api/user")]
 [ApiController]
-public class UserController : Controller
+public class UserController(IMediator mediator) : Controller
 {
-    private readonly IMediator _mediator;
-
-    public UserController(IMediator mediator)
-    {
-        _mediator = mediator;
-    }
-
     /// <summary>
     /// Register new User and send confirmation email to User's email.
     /// </summary>
@@ -42,7 +35,7 @@ public class UserController : Controller
     [HttpPost("register")]
     public async Task<ActionResult<BaseResponse<PageResult<UserDto>>>> RegisterUserAsync([FromBody] RegisterUserDto registerUser)
     {
-        var result = await _mediator
+        var result = await mediator
             .Send(new RegisterUserCommand
             {
                 RegisterUserDto = registerUser
@@ -67,7 +60,7 @@ public class UserController : Controller
     [HttpPost("signin")]
     public async Task<ActionResult<BaseResponse<RefreshTokenResponse>>> SignInUserAsync([FromBody] SignInDto dto)
     {
-        var response = await _mediator.Send(new SignInCommand(dto));
+        var response = await mediator.Send(new SignInCommand(dto));
 
         if (response is null)
         {
@@ -97,7 +90,7 @@ public class UserController : Controller
     public async Task<ActionResult<BaseResponse<bool>>> SignOutUserAsync()
     {
         HttpContext.Request.Headers.TryGetValue("Authorization", out var accessToken);
-        await _mediator.Send(new SignOutCommand(accessToken.ToString().Split(' ').Last()));
+        await mediator.Send(new SignOutCommand(accessToken.ToString().Split(' ').Last()));
 
         return Ok(new BaseResponse<bool>
         {
@@ -130,7 +123,7 @@ public class UserController : Controller
             });
         }
 
-        var response = await _mediator.Send(new RefreshTokenCommand(refreshToken.RefreshToken, 
+        var response = await mediator.Send(new RefreshTokenCommand(refreshToken.RefreshToken, 
                                                                     accessToken.ToString().Split(' ')[1]));
 
         if (response is null)
@@ -160,7 +153,7 @@ public class UserController : Controller
     [HttpGet("get-history")]
     public async Task<ActionResult<BaseResponse<PageResult<UserExchangeHistoryDto>>>> GetAllUserExchangeHistories([FromQuery] FilterUserExchangeHistoryDto filter)
     {
-        var result = await _mediator.Send(new GetUserExchangeHistoryListQuery(filter));
+        var result = await mediator.Send(new GetUserExchangeHistoryListQuery(filter));
         if (result is null)
         {
             return NotFound(new BaseResponse<PageResult<UserExchangeHistoryDto>>
@@ -186,7 +179,7 @@ public class UserController : Controller
     public async Task<ActionResult<BaseResponse<UserExchangeHistoryDto>>> GetUserExchangeHistoryById(int id)
     {
 
-        var result = await _mediator.Send(new GetSingleUserExchangeHistoryQuery(id));
+        var result = await mediator.Send(new GetSingleUserExchangeHistoryQuery(id));
         if (result == null)
         {
             return NotFound(new BaseResponse<UserExchangeHistoryDto>
@@ -211,7 +204,7 @@ public class UserController : Controller
     [HttpPost("get-user")]
     public async Task<ActionResult<BaseResponse<UserDto>>> GetUserInformation([FromBody] GetUserRequest filter)
     {
-        var result = await _mediator.Send(new GetUserInformationQuery(filter));
+        var result = await mediator.Send(new GetUserInformationQuery(filter));
         if (result is null)
         {
             return NotFound(new BaseResponse<UserDto>

@@ -4,17 +4,11 @@ using MediatR;
 
 namespace Currencies.WebApi.Modules.Currency.Commands.Create;
 
-public class CreateCurrencyCommandHandler : IRequestHandler<CreateCurrencyCommand, CurrencyDto?>
+public class CreateCurrencyCommandHandler(ICurrencyService currencyService)
+    : IRequestHandler<CreateCurrencyCommand, CurrencyDto?>
 {
-    private readonly ICurrencyService _currencyService;
-
-    public CreateCurrencyCommandHandler(ICurrencyService currencyService)
-    {
-        _currencyService = currencyService;
-    }
-
     public async Task<CurrencyDto?> Handle(CreateCurrencyCommand request, CancellationToken cancellationToken)
     {
-        return await _currencyService.CreateAsync(request.Data, cancellationToken);
+        return await currencyService.CreateAsync(request.Data, cancellationToken);
     }
 }

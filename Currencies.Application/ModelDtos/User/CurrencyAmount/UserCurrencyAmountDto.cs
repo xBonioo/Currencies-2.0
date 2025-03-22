@@ -1,6 +1,6 @@
 ﻿namespace Currencies.Application.ModelDtos.User.CurrencyAmount;
 
-public class UserCurrencyAmountDto : BaseUserCurrencyAmountDto
+public sealed class UserCurrencyAmountDto : BaseUserCurrencyAmountDto
 {
     public int Id { get; set; }
     public int? RateId { get; set; }

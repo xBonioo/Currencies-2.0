@@ -10,18 +10,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Currencies.Application.Services;
 
-public class UserExchangeHistoryService : IUserExchangeHistoryService
+public class UserExchangeHistoryService(TableContext dbContext, IMapper mapper) : IUserExchangeHistoryService
 {
-    private readonly TableContext _dbContext;
-    private readonly IMapper _mapper;
-
-    public UserExchangeHistoryService(TableContext dbContext, IMapper mapper)
-    {
-        _dbContext = dbContext;
-        _mapper = mapper;
-    }
-
-    public async Task<bool> AddUserExchangeHistoryAsync(UserExchangeHistoryDto dto, CancellationToken cancellationToken)
+    public async Task<bool> AddUserExchangeHistoryAsync(UserExchangeHistoryDto? dto, CancellationToken cancellationToken)
     {
         if (dto == null)
         {
@@ -30,17 +21,17 @@ public class UserExchangeHistoryService : IUserExchangeHistoryService
 
         var history = new UserExchangeHistory()
         {
-            UserID = dto.UserID,
-            RateID = dto.RateID,
+            UserId = dto.UserId,
+            RateId = dto.RateId,
             Amount = dto.Amount,
-            AccountID = dto.AccountID,
+            AccountId = dto.AccountId,
             PaymentStatus = dto.PaymentStatus,
             PaymentType = dto.PaymentType,
         };
 
-        _dbContext.UserExchangeHistories.Add(history);
+        dbContext.UserExchangeHistories.Add(history);
 
-        if (await _dbContext.SaveChangesAsync(cancellationToken) > 0)
+        if (await dbContext.SaveChangesAsync(cancellationToken) > 0)
         {
             return true;
         }
@@ -50,7 +41,7 @@ public class UserExchangeHistoryService : IUserExchangeHistoryService
 
     public async Task<PageResult<UserExchangeHistoryDto>> GetAllUserExchangeHistoryServiceiesAsync(FilterUserExchangeHistoryDto filter, CancellationToken cancellationToken)
     {
-        var baseQuery = _dbContext
+        var baseQuery = dbContext
          .UserExchangeHistories
          .AsQueryable();
 
@@ -61,7 +52,7 @@ public class UserExchangeHistoryService : IUserExchangeHistoryService
 
         if (!string.IsNullOrEmpty(filter.SearchPhrase))
         {
-            baseQuery = baseQuery.Where(x => x.UserID.Contains(filter.SearchPhrase));
+            baseQuery = baseQuery.Where(x => x.UserId.Contains(filter.SearchPhrase));
         }
 
         var totalItemCount = baseQuery.Count();
@@ -69,7 +60,7 @@ public class UserExchangeHistoryService : IUserExchangeHistoryService
         var itemsDto = await baseQuery
             .Skip(filter.PageSize * (filter.PageNumber - 1))
             .Take(filter.PageSize)
-            .ProjectTo<UserExchangeHistoryDto>(_mapper.ConfigurationProvider)
+            .ProjectTo<UserExchangeHistoryDto>(mapper.ConfigurationProvider)
             .ToListAsync(cancellationToken);
 
         return new PageResult<UserExchangeHistoryDto>(itemsDto, totalItemCount, filter.PageSize, filter.PageNumber);
@@ -77,7 +68,7 @@ public class UserExchangeHistoryService : IUserExchangeHistoryService
 
     public async Task<UserExchangeHistory?> GetByIdAsync(int id, CancellationToken cancellationToken)
     {
-        var result = await _dbContext
+        var result = await dbContext
            .UserExchangeHistories
            .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
 

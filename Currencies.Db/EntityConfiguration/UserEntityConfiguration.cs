@@ -53,6 +53,6 @@ public class UserEntityConfiguration : IEntityTypeConfiguration<ApplicationUser>
         builder
             .HasMany(r => r.UserExchangeHistory)
             .WithOne(u => u.User)
-            .HasForeignKey(u => u.UserID);
+            .HasForeignKey(u => u.UserId);
     }
 }

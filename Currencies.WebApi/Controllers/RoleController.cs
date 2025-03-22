@@ -21,15 +21,8 @@ namespace Currencies.WebApi.Controllers;
 [Authorize]
 [Route("api/role")]
 [ApiController]
-public class RoleController : Controller
+public class RoleController(IMediator mediator) : Controller
 {
-    private readonly IMediator _mediator;
-
-    public RoleController(IMediator mediator)
-    {
-        _mediator = mediator;
-    }
-
     /// <summary>
     /// Retrieves all available roles.
     /// </summary>
@@ -38,7 +31,7 @@ public class RoleController : Controller
     [HttpGet]
     public async Task<ActionResult<BaseResponse<PageResult<RoleDto>>>> GetAllRoles([FromQuery] FilterRoleDto filter)
     {
-        var result = await _mediator.Send(new GetRolesListQuery(filter));   
+        var result = await mediator.Send(new GetRolesListQuery(filter));   
         if (result == null)
         {
             return NotFound(new BaseResponse<PageResult<RoleDto>>
@@ -63,7 +56,7 @@ public class RoleController : Controller
     [HttpGet("{id}")]
     public async Task<ActionResult<BaseResponse<RoleDto>>> GetRoleById(int id)
     {
-        var result = await _mediator.Send(new GetSingleRoleQuery(id));
+        var result = await mediator.Send(new GetSingleRoleQuery(id));
         if (result == null)
         {
             return NotFound(new BaseResponse<RoleDto>
@@ -86,9 +79,9 @@ public class RoleController : Controller
     /// <response code="201">Role correctly created.</response>
     /// <response code="400">Please insert correct JSON object with parameters.</response>
     [HttpPost]
-    public async Task<ActionResult<BaseResponse<RoleDto>>> CreateRole([FromBody] BaseRoleDto dto)
+    public async Task<ActionResult<BaseResponse<RoleDto>>> CreateRole([FromBody] BaseRoleDto? dto)
     {
-        var result = await _mediator.Send(new CreateRoleCommand(dto));
+        var result = await mediator.Send(new CreateRoleCommand(dto));
         if (result == null)
         {
             return BadRequest(new BaseResponse<RoleDto>
@@ -112,7 +105,7 @@ public class RoleController : Controller
     [HttpGet("{id}/edit-form")]
     public async Task<ActionResult<BaseResponse<RoleEditForm>>> GetRoleEditForm(int id)
     {
-        var result = await _mediator.Send(new GetRoleEditFormQuery(id));
+        var result = await mediator.Send(new GetRoleEditFormQuery(id));
         if (result == null)
         {
             return NotFound(new BaseResponse<RoleEditForm>
@@ -138,7 +131,7 @@ public class RoleController : Controller
     [HttpPost("{id}/edit")]
     public async Task<ActionResult<BaseResponse<RoleDto>>> UpdateRole(int id, [FromBody] BaseRoleDto dto)
     {
-        var result = await _mediator.Send(new UpdateRoleCommand(id, dto));
+        var result = await mediator.Send(new UpdateRoleCommand(id, dto));
         if (result == null)
         {
             return NotFound(new BaseResponse<RoleDto>
@@ -164,7 +157,7 @@ public class RoleController : Controller
     [HttpDelete("{id}/delete")]
     public async Task<ActionResult<BaseResponse<bool>>> DeleteRole(int id)
     {
-        var result = await _mediator.Send(new DeleteRoleCommand(id));
+        var result = await mediator.Send(new DeleteRoleCommand(id));
         if (!result)
         {
             return NotFound(new BaseResponse<bool>

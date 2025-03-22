@@ -14,12 +14,12 @@ public class ExchangeRateEntityConfiguration : IEntityTypeConfiguration<Exchange
         builder
             .HasOne(e => e.FromCurrency)
             .WithMany()
-            .HasForeignKey(e => e.FromCurrencyID);
+            .HasForeignKey(e => e.FromCurrencyId);
 
         builder
             .HasOne(e => e.ToCurrency)
             .WithMany()
-            .HasForeignKey(e => e.ToCurrencyID);
+            .HasForeignKey(e => e.ToCurrencyId);
 
         builder
             .Property(r => r.Rate)

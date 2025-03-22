@@ -9,23 +9,16 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace Currencies.Application.Services;
 
-public class TokenService : ITokenService
+public class TokenService(IConfiguration configuration) : ITokenService
 {
-    private readonly IConfiguration _configuration;
-
-    public TokenService(IConfiguration configuration)
-    {
-        _configuration = configuration;
-    }
-
     public string GenerateAccessToken(IEnumerable<Claim> claims)
     {
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Authentication:SecretKey"]));
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Authentication:SecretKey"] ?? throw new InvalidOperationException()));
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
         var jwt = new JwtSecurityToken(
-            audience: Environment.GetEnvironmentVariable("Authentication:Audience") ?? _configuration["Authentication:Audience"],
-            issuer: _configuration["Authentication:Issuer"],
+            audience: Environment.GetEnvironmentVariable("Authentication:Audience") ?? configuration["Authentication:Audience"],
+            issuer: configuration["Authentication:Issuer"],
             claims: claims,
             notBefore: DateTime.UtcNow,
             expires: DateTime.UtcNow.AddMinutes(5),
@@ -49,12 +42,12 @@ public class TokenService : ITokenService
     {
         var tokenValidationParameters = new TokenValidationParameters
         {
-            ValidIssuer = _configuration["Authentication:Issuer"],
-            ValidAudience = _configuration["Authentication:Audience"],
+            ValidIssuer = configuration["Authentication:Issuer"],
+            ValidAudience = configuration["Authentication:Audience"],
             ValidateAudience = true,
             ValidateIssuer = true,
             ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Authentication:SecretKey"])),
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Authentication:SecretKey"] ?? throw new InvalidOperationException())),
             ValidateLifetime = false
         };
 

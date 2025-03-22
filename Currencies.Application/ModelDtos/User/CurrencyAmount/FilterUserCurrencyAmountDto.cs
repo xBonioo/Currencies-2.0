@@ -1,5 +1,5 @@
 ﻿namespace Currencies.Application.ModelDtos.User.CurrencyAmount;
 
-public class FilterUserCurrencyAmountDto : FilterDto
+public sealed class FilterUserCurrencyAmountDto : FilterDto
 {
 }

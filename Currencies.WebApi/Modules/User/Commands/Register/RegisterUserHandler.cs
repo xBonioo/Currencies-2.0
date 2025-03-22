@@ -4,14 +4,9 @@ using MediatR;
 
 namespace Currencies.WebApi.Modules.User.Commands.Register;
 
-public class RegisterUserHandler : IRequestHandler<RegisterUserCommand, UserDto>
+public class RegisterUserHandler(IUserService userService) : IRequestHandler<RegisterUserCommand, UserDto>
 {
-    public IUserService _userService { get; set; }
-
-    public RegisterUserHandler(IUserService userService)
-    {
-        _userService = userService;
-    }
+    public IUserService _userService { get; set; } = userService;
 
     public Task<UserDto> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
     {

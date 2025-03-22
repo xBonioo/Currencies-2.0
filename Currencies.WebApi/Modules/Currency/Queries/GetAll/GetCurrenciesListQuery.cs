@@ -4,12 +4,7 @@ using MediatR;
 
 namespace Currencies.WebApi.Modules.Currency.Queries.GetAll;
 
-public class GetCurrenciesListQuery : IRequest<PageResult<CurrencyDto>>
+public class GetCurrenciesListQuery(FilterCurrencyDto filter) : IRequest<PageResult<CurrencyDto>>
 {
-    public FilterCurrencyDto Filter;
-
-    public GetCurrenciesListQuery(FilterCurrencyDto filter)
-    {
-        Filter = filter;
-    }
+    public FilterCurrencyDto Filter = filter;
 }

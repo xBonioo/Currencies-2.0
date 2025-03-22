@@ -10,18 +10,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Currencies.Application.Services;
 
-public class RoleService : IRoleService
+public class RoleService(TableContext dbContext, IMapper mapper) : IRoleService
 {
-    private readonly TableContext _dbContext;
-    private readonly IMapper _mapper;
-
-    public RoleService(TableContext dbContext, IMapper mapper)
-    {
-        _dbContext = dbContext;
-        _mapper = mapper;
-    }
-
-    public async Task<RoleDto?> CreateAsync(BaseRoleDto dto, CancellationToken cancellationToken)
+    public async Task<RoleDto?> CreateAsync(BaseRoleDto? dto, CancellationToken cancellationToken)
     {
         if (dto == null)
         {
@@ -33,11 +24,11 @@ public class RoleService : IRoleService
             Name = dto.Name
         };
 
-        _dbContext.Roles.Add(role);
+        dbContext.Roles.Add(role);
 
-        if (await _dbContext.SaveChangesAsync(cancellationToken) > 0)
+        if (await dbContext.SaveChangesAsync(cancellationToken) > 0)
         {
-            return _mapper.Map<RoleDto>(role);
+            return mapper.Map<RoleDto>(role);
         }
 
         throw new DbUpdateException($"Could not save changes to database at: {nameof(CreateAsync)}");
@@ -54,7 +45,7 @@ public class RoleService : IRoleService
 
         role.IsActive = false;
 
-        if ((await _dbContext.SaveChangesAsync(cancellationToken)) > 0)
+        if ((await dbContext.SaveChangesAsync(cancellationToken)) > 0)
         {
             return true;
         }
@@ -62,9 +53,9 @@ public class RoleService : IRoleService
         throw new DbUpdateException($"Could not save changes to database at: {nameof(DeleteAsync)}");
     }
 
-    public async Task<PageResult<RoleDto>?> GetAllRolesAsync(FilterRoleDto filter, CancellationToken cancellationToken)
+    public async Task<PageResult<RoleDto>> GetAllRolesAsync(FilterRoleDto filter, CancellationToken cancellationToken)
     {
-        var baseQuery = _dbContext
+        var baseQuery = dbContext
            .Roles
            .AsQueryable();
 
@@ -87,7 +78,7 @@ public class RoleService : IRoleService
         var itemsDto = await baseQuery
             .Skip(filter.PageSize * (filter.PageNumber - 1))
             .Take(filter.PageSize)
-            .ProjectTo<RoleDto>(_mapper.ConfigurationProvider)
+            .ProjectTo<RoleDto>(mapper.ConfigurationProvider)
             .ToListAsync(cancellationToken);
 
         return new PageResult<RoleDto>(itemsDto, totalItemCount, filter.PageSize, filter.PageNumber);
@@ -104,9 +95,9 @@ public class RoleService : IRoleService
         role.Name = dto.Name;
         role.IsActive = dto.IsActive;
 
-        if ((await _dbContext.SaveChangesAsync(cancellationToken)) > 0)
+        if ((await dbContext.SaveChangesAsync(cancellationToken)) > 0)
         {
-            return _mapper.Map<RoleDto>(role);
+            return mapper.Map<RoleDto>(role);
         }
 
         throw new DbUpdateException($"Could not save changes to database at: {nameof(UpdateAsync)}");
@@ -114,7 +105,7 @@ public class RoleService : IRoleService
 
     public async Task<Role?> GetByIdAsync(int id, CancellationToken cancellationToken)
     {
-        var result = await _dbContext
+        var result = await dbContext
             .Roles
             .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
 

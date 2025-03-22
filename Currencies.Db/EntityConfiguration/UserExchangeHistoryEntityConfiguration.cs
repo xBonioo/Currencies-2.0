@@ -14,12 +14,12 @@ public class UserExchangeHistoryEntityConfiguration : IEntityTypeConfiguration<U
         builder
             .HasOne(u => u.User)
             .WithMany(u => u.UserExchangeHistory)
-            .HasForeignKey(u => u.UserID);
+            .HasForeignKey(u => u.UserId);
 
         builder
            .HasOne(u => u.Rate)
            .WithMany()
-           .HasForeignKey(u => u.RateID)
+           .HasForeignKey(u => u.RateId)
            .IsRequired(false);
 
         builder
@@ -30,7 +30,7 @@ public class UserExchangeHistoryEntityConfiguration : IEntityTypeConfiguration<U
         builder
           .HasOne(u => u.Account)
           .WithMany()
-          .HasForeignKey(u => u.AccountID);
+          .HasForeignKey(u => u.AccountId);
 
         builder
           .Property(u => u.PaymentStatus)

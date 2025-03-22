@@ -4,12 +4,8 @@ using MediatR;
 
 namespace Currencies.WebApi.Modules.UserExchangeHistory.Queries.GetAll;
 
-public class GetUserExchangeHistoryListQuery : IRequest<PageResult<UserExchangeHistoryDto>>
+public class GetUserExchangeHistoryListQuery(FilterUserExchangeHistoryDto filter)
+    : IRequest<PageResult<UserExchangeHistoryDto>>
 {
-    public FilterUserExchangeHistoryDto Filter;
-
-    public GetUserExchangeHistoryListQuery(FilterUserExchangeHistoryDto filter)
-    {
-        Filter = filter;
-    }
+    public FilterUserExchangeHistoryDto Filter = filter;
 }

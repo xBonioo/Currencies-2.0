@@ -4,17 +4,10 @@ using MediatR;
 
 namespace Currencies.WebApi.Modules.User.Commands.RefreshToken;
 
-public class RefreshTokenHandler : IRequestHandler<RefreshTokenCommand, RefreshTokenResponse?>
+public class RefreshTokenHandler(IUserService userService) : IRequestHandler<RefreshTokenCommand, RefreshTokenResponse?>
 {
-    private readonly IUserService _userService;
-
-    public RefreshTokenHandler(IUserService userService)
-    {
-        _userService = userService;
-    }
-
     public async Task<RefreshTokenResponse?> Handle(RefreshTokenCommand request, CancellationToken cancellationToken)
     {
-        return await _userService.RefreshTokenAsync(request.refreshToken, request.accessToken, cancellationToken);
+        return await userService.RefreshTokenAsync(request.refreshToken, request.accessToken, cancellationToken);
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace Currencies.Application.ModelDtos.User.CurrencyAmount;
 
-public class ConvertUserCurrencyAmountDto
+public sealed class ConvertUserCurrencyAmountDto
 {
     public string UserId { get; set; } = null!;
     public int FromCurrencyId { get; set; }

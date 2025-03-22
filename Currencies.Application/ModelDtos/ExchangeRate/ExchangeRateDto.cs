@@ -1,6 +1,6 @@
 ﻿namespace Currencies.Application.ModelDtos.ExchangeRate;
 
-public class ExchangeRateDto : BaseExchangeRateDto
+public sealed class ExchangeRateDto : BaseExchangeRateDto
 {
     public int Id { get; set; }
     public DateTime CreatedOn { get; set; }
