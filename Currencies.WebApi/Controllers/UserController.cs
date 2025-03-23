@@ -178,7 +178,6 @@ public class UserController(IMediator mediator) : Controller
     [HttpGet("get-history/{id}")]
     public async Task<ActionResult<BaseResponse<UserExchangeHistoryDto>>> GetUserExchangeHistoryById(int id)
     {
-
         var result = await mediator.Send(new GetSingleUserExchangeHistoryQuery(id));
         if (result == null)
         {

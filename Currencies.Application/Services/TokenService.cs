@@ -21,7 +21,7 @@ public class TokenService(IConfiguration configuration) : ITokenService
             issuer: configuration["Authentication:Issuer"],
             claims: claims,
             notBefore: DateTime.UtcNow,
-            expires: DateTime.UtcNow.AddMinutes(5),
+            expires: DateTime.UtcNow.AddMinutes(30),
             signingCredentials: credentials
         );
         
