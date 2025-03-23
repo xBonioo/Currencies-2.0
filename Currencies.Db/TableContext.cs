@@ -182,11 +182,11 @@ public class TableContext : IdentityDbContext<
                 Email = "test1@mail.com",
                 NormalizedEmail = "TEST1@MAIL.COM",
                 PasswordHash = "AQAAAAEAACcQAAAAEIR44hzbnj/pCIqsHG4vIPm/ARO5F+qPlxQp9Wjhn+EBi/q73B+RlmXZNV+yUOvgPQ==",
-                Adres = "Warszawa,",
+                Address = "Warszawa,",
                 IdentityNumber = 997,
-                IDNumber = "EZ12345",
-                IDExpiryDate = new DateTime(2030, 01, 01),
-                IDIssueDate = new DateTime(2020, 01, 01)
+                IdNumber = "EZ12345",
+                IdExpiryDate = new DateTime(2030, 01, 01),
+                IdIssueDate = new DateTime(2020, 01, 01)
             });
 
         modelBuilder.Entity<ExchangeRate>().HasData(

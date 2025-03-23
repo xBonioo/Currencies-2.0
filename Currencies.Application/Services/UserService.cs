@@ -26,11 +26,11 @@ public class UserService(
             EmailConfirmed = true,
             RoleId = 2,
             IsActive = true,
-            Adres = registerUserDto.Adres,
+            Address = registerUserDto.Adres,
             IdentityNumber = registerUserDto.IdentityNumber,
-            IDNumber = registerUserDto.IdNumber,
-            IDExpiryDate = registerUserDto.IdExpiryDate,
-            IDIssueDate = registerUserDto.IdIssueDate
+            IdNumber = registerUserDto.IdNumber,
+            IdExpiryDate = registerUserDto.IdExpiryDate,
+            IdIssueDate = registerUserDto.IdIssueDate
         };
 
         await using var transaction = await dbContext.Database.BeginTransactionAsync(cancellationToken);

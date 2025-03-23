@@ -25,7 +25,7 @@ public class UserEntityConfiguration : IEntityTypeConfiguration<ApplicationUser>
              .IsRequired();
 
         builder
-            .Property(r => r.Adres)
+            .Property(r => r.Address)
             .HasMaxLength(64);
 
         builder
@@ -33,16 +33,16 @@ public class UserEntityConfiguration : IEntityTypeConfiguration<ApplicationUser>
             .IsRequired();
 
         builder
-            .Property(r => r.IDNumber)
+            .Property(r => r.IdNumber)
             .HasMaxLength(64)
             .IsRequired();
 
         builder
-            .Property(r => r.IDExpiryDate)
+            .Property(r => r.IdExpiryDate)
             .IsRequired();
 
         builder
-            .Property(r => r.IDIssueDate)
+            .Property(r => r.IdIssueDate)
             .IsRequired();
 
         builder

@@ -7,13 +7,13 @@ public class ApplicationUser : IdentityUser
     public string? FirstName { get; set; }
     public string? SecondName { get; set; }
     public bool IsActive { get; set; } = true;
-    public int RoleId { get; set; }
+    public int? RoleId { get; set; }
 
-    public string Adres { get; set; }
+    public string? Address { get; set; }
     public int IdentityNumber { get; set; }
-    public string IDNumber { get; set; }
-    public DateTime IDExpiryDate { get; set; }
-    public DateTime IDIssueDate { get; set; }
+    public string? IdNumber { get; set; }
+    public DateTime IdExpiryDate { get; set; }
+    public DateTime IdIssueDate { get; set; }
     public DateTime CreatedOn { get; set; }
     public DateTime? ModifiedOn { get; set; }
 
